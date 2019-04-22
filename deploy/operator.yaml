@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: smartgateway-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: smartgateway-operator
+  template:
+    metadata:
+      labels:
+        name: smartgateway-operator
+    spec:
+      serviceAccountName: smartgateway-operator
+      containers:
+        - name: smartgateway-operator
+          # Replace this with the built image name
+          image: REPLACE_IMAGE
+          command:
+          - smartgateway-operator
+          imagePullPolicy: Always
+          env:
+            - name: WATCH_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPERATOR_NAME
+              value: "smartgateway-operator"
